@@ -1,12 +1,18 @@
 'use strict';
 // const _ = require('lodash');
 
-const resolver = require('./resolver/resolver');
-const launch = require('./launcher/launch');
-const launcherSink = require('./launcher/launch');
 
-module.exports = {
-  registerResolver: resolver.register,
-  registerLauncher: launcherSink.register,
-  launch
-};
+const launcher = require('./launcher');
+const mapping = require('./mapping');
+
+let root = {};
+
+root.mapping = {};
+root.mapping.resolvers.register = mapping.sink.register;
+
+root.execute = launcher.execute;
+
+root.launchers = {};
+root.launchers.register = launcher.sink.register;
+
+module.exports = root;

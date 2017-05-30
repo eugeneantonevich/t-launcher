@@ -1,7 +1,6 @@
 'use strict';
 const _ = require('lodash');
-const convert = require('./convert');
-const propagateValues = require('./propagateValues');
+const utils = require('../common/utils');
 const merge = require('deepmerge');
 
 function _validate(values, template) {
@@ -31,13 +30,13 @@ function _prepareData(values, template) {
 
 let preprocess = {};
 
-preprocess.prepareValuesToLaunch = function(laucher, values) {
-  return _prepareData(values, laucher.inputFields);
+preprocess.prepareValuesToLaunch = function(launcher, values) {
+  return _prepareData(values, launcher.inputFields);
 };
 
-preprocess.preprocessValues = function(laucher, values) {
-  const matched = convert(laucher.inFieldsMatch, _.clone(values));
-  return propagateValues(laucher.inFieldsDefault, _.isNil(matched) ? values : merge(values, matched));
+preprocess.preprocessValues = function(launcher, values) {
+  const matched = utils.convert(launcher.inFieldsMatch, _.clone(values));
+  return utils.propagateValues(launcher.inFieldsDefault, _.isNil(matched) ? values : merge(values, matched));
 };
 
 preprocess.validate = function(values, template) {

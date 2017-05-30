@@ -1,23 +1,14 @@
 'using strict';
 const _ = require('lodash');
-
-let resolverSink = [];
-
-function register(resolver) {
-  if (_.isNil(resolver.resolve)) {
-    throw new Error('Launch resolver should contain function resolve');
-  }
-
-  resolverSink.push(resolver);
-}
+const sink = require('./resolverSink');
 
 /**
   * @param {Object} launcher
   * @return {Object}
 
-  laucher.name - processor name
-  laucher.inFieldsMatch - input processor field match data
-  laucher.outFieldsMatch - output processOne field match data
+  launcher.name - processor name
+  launcher.inFieldsMatch - input processor field match data
+  launcher.outFieldsMatch - output processOne field match data
 
   inFieldsMatch present in processorInfo => return same object
   outFieldsMatch present in processorInfo => return same object
@@ -39,7 +30,7 @@ function _resolveOne(launcher, parameters) {
       return complete(launcher);
     }
 
-    return Promise.all(_.map(resolverSink, resolver => resolver.resolver(launcher, parameters)))
+    return Promise.all(_.map(sink.all, resolver => resolver.resolver(launcher, parameters)))
       .then(resolved => {
         return _.transform(resolved, (result, r) => {
           if (_.isNil(result.inFieldsMatch)) {
@@ -60,7 +51,7 @@ function _resolveOne(launcher, parameters) {
 
 function resolve(launchers, parameters) {
   if (_.isArray(launchers)) {
-    return Promise.all(_.map(launchers, laucher => _resolveOne(laucher, parameters)))
+    return Promise.all(_.map(launchers, launcher => _resolveOne(launcher, parameters)))
       .then(chunk => {
         return _.transform(chunk, (res, _processors) => {
           _.map(_processors, proc => res.push(proc));
@@ -70,7 +61,4 @@ function resolve(launchers, parameters) {
   return _resolveOne(launchers);
 }
 
-module.exports = {
-  register,
-  resolve
-};
+module.exports = resolve;
