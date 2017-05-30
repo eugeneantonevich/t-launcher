@@ -11,7 +11,7 @@ const TestLauncher  = require('./testLauncher');
 chai.use(dirtyChai);
 chai.use(like);
 
-describe('Data processor path suite:', function () {
+describe('Raw launcher flow:', function () {
 
   before(function (done) {
     done();
@@ -42,12 +42,17 @@ describe('Data processor path suite:', function () {
     done();
   });
 
-  it('Process test launcher', function (done) {
-    launcher.execute({ name: 'test' })
-      .then(responce => console.log(responce))
-      .then(() => done())
-      .catch(err => {
-        done();
+  it('Process test launcher as object', function () {
+    return launcher.execute({ name: 'test' })
+      .then(responce => {
+        expect(responce).to.be.like({ responce: 'value' });
+      })
+  });
+
+  it('Process test launcher as object with input values', function () {
+    return launcher.execute({ name: 'test' }, { additional: 'values2' })
+      .then(responce => {
+        expect(responce).to.be.like({ responce: 'value', additional: 'values2' });
       })
   });
 

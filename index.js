@@ -8,6 +8,7 @@ const mapping = require('./mapping');
 let root = {};
 
 root.mapping = {};
+root.mapping.resolvers = {};
 root.mapping.resolvers.register = mapping.sink.register;
 
 root.execute = launcher.execute;

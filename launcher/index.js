@@ -3,7 +3,7 @@
 const execute = require('./execute');
 const mapping = require('../mapping');
 const utils = require('../common/utils');
-const laucherSink = require('./sink');
+const launcherSink = require('./sink');
 const _ = require('lodash');
 
 function _validate(data) {
@@ -24,7 +24,7 @@ function launch(launchers, values) {
   }
   return mapping.resolve(launchData)
     .then(resolved => {
-      return laucherSink.resolve(resolved);
+      return launcherSink.resolve(resolved);
     })
     .then(executors => {
       if (!executors.length) {
@@ -36,5 +36,5 @@ function launch(launchers, values) {
 }
 
 module.exports = {
-  execute: launch, sink: laucherSink
+  execute: launch, sink: launcherSink
 };

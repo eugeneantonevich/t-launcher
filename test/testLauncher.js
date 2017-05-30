@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 
 class TestLauncher {
 
@@ -6,8 +7,8 @@ class TestLauncher {
     return 'test';
   }
 
-  static process() {
-    return { responce: 'value' }
+  static process(input) {
+    return _.assign({ responce: 'value' }, input);
   }
 }
 
