@@ -6,7 +6,7 @@ const _ = require('lodash');
 let expect = chai.expect;
 
 const launcher = require('../launcher');
-const TestLauncher  = require('./testLauncher');
+const TestLauncher  = require('./launchers/testLauncher');
 
 chai.use(dirtyChai);
 chai.use(like);
