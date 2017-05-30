@@ -3,7 +3,7 @@
 const execute = require('./execute');
 const mapping = require('../mapping');
 const utils = require('../common/utils');
-const sink = require('./sink');
+const laucherSink = require('./sink');
 const _ = require('lodash');
 
 function _validate(data) {
@@ -19,24 +19,22 @@ function _prepare(launchers) {
 
 function launch(launchers, values) {
   let launchData = _validate(_prepare(launchers));
-
   if (!launchData.length) {
-    return null;
+    return Promise.resolve(null);
   }
-
-  let resolved = mapping.resolve(launchData);
-
-  let executors = sink.resolve(resolved);
-
-  if (!executors.length) {
-    return null;
-  }
-
-  let chunks = utils.chunkByPriority(executors);
-
-  return execute(chunks, values);
+  return mapping.resolve(launchData)
+    .then(resolved => {
+      return laucherSink.resolve(resolved);
+    })
+    .then(executors => {
+      if (!executors.length) {
+        return null;
+      }
+      let chunks = utils.chunkByPriority(executors);
+      return execute(chunks, values);
+    });
 }
 
 module.exports = {
-  execute: launch, sink
+  execute: launch, sink: laucherSink
 };

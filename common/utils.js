@@ -51,17 +51,14 @@ function convert(rules, values) {
    [[{ procesor1.. priority: 1.. }, { procesor3.. priority: 1.. }], [{ .. priority: 2... }]]
 */
 function chunkByPriority(launchers) {
-  if (_.isArray(launchers)) {
-    return _.transform(launchers, (chunk, launcher) => {
-      const priority = _.isNumber(launcher.priority) ? launcher.priority : 0;
-      if (_.isNil(chunk[priority])) {
-        chunk[priority] = [launcher];
-      } else {
-        chunk[priority].push(launcher);
-      }
-    }, []);
-  }
-  return launchers;
+  return _.transform(launchers, (chunk, launcher) => {
+    const priority = _.isNumber(launcher.priority) ? launcher.priority : 0;
+    if (_.isNil(chunk[priority])) {
+      chunk[priority] = [launcher];
+    } else {
+      chunk[priority].push(launcher);
+    }
+  }, []);
 }
 
 module.exports = {

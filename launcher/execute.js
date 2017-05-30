@@ -6,12 +6,12 @@ const preprocess = require('./preprocess');
 function _processOne(launcher, values) {
   let preprocessed = preprocess.preprocessValues(launcher, values);
 
-  let preparedData = preprocess.prepareValuesToLaunch(preprocessed, launcher.inputFields);
+  let requiredValues = preprocess.getRequieredValues(launcher, preprocessed);
 
-  if (!preprocess.validate(preparedData, launcher.inputFields)) {
+  if (!preprocess.validate(requiredValues, launcher)) {
     return Promise.resolve(null);
   }
-  return Promise.resolve(launcher.process(preparedData, launcher.parameters))
+  return Promise.resolve(launcher.process(requiredValues, launcher.parameters))
     .then(result => {
       return postprocess(launcher, result);
     }, () => {

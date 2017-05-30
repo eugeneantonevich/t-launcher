@@ -30,7 +30,7 @@ function _prepareData(values, template) {
 
 let preprocess = {};
 
-preprocess.prepareValuesToLaunch = function(launcher, values) {
+preprocess.getRequieredValues = function(launcher, values) {
   return _prepareData(values, launcher.inputFields);
 };
 
@@ -39,7 +39,8 @@ preprocess.preprocessValues = function(launcher, values) {
   return utils.propagateValues(launcher.inFieldsDefault, _.isNil(matched) ? values : merge(values, matched));
 };
 
-preprocess.validate = function(values, template) {
+preprocess.validate = function(values, laucher) {
+  const template = laucher.inputFields;
   if (_.isArray(values)) {
     return _.every(values, v => {
       return preprocess.validate(v, template);

@@ -23,7 +23,7 @@ const sink = require('./resolverSink');
 function _resolveOne(launcher, parameters) {
   return new Promise((complete, reject) => {
     if (_.isNil(launcher.name)) {
-      return complete(null);
+      return reject(new Error('Launcher name is empty'));
     }
 
     if (!_.isNil(launcher.inFieldsMatch) && !_.isNil(launcher.outFieldsMatch)) {
@@ -50,15 +50,16 @@ function _resolveOne(launcher, parameters) {
 }
 
 function resolve(launchers, parameters) {
-  if (_.isArray(launchers)) {
-    return Promise.all(_.map(launchers, launcher => _resolveOne(launcher, parameters)))
-      .then(chunk => {
-        return _.transform(chunk, (res, _processors) => {
-          _.map(_processors, proc => res.push(proc));
-        }, []);
-      });
+  if (!sink.all.length) {
+    return Promise.resolve(launchers);
   }
-  return _resolveOne(launchers);
+
+  return Promise.all(_.map(launchers, launcher => _resolveOne(launcher, parameters)))
+    .then(chunk => {
+      return _.transform(chunk, (res, _processors) => {
+        _.map(_processors, proc => res.push(proc));
+      }, []);
+    });
 }
 
 module.exports = resolve;

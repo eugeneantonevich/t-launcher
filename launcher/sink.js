@@ -10,26 +10,33 @@ class LauncherSink {
     return launchers[name];
   }
 
-  static get all() {
-    return launchers;
-  }
+  static register(launcher) {
+    if (_.isNil(launcher)) {
+      throw new Error('Launcher is empty');
+    }
 
-  static register(name, launcher) {
-    if (_.isNil(name) || _.isNil(launcher)) {
-      throw new Error('Name or launcher is empty');
+    if (_.isNil(launcher.type)) {
+      throw new Error('Launcher should contain type');
     }
 
     if (_.isNil(launcher.process)) {
-      throw new Error('launcher should contain function process');
+      throw new Error('Launcher should contain function process');
     }
-    launchers[name] = launcher;
+    launchers[launcher.type] = launcher;
   }
 
   static resolve(data) {
-    if (_.isArray(data)) {
-      return _.compact(_.map(data, launcher => _.assign(launchers[launcher.name], launcher)));
-    }
-    return _.assign(launchers[data.name], data);
+    return _.transform(data, (result, launcher) => {
+      const executor = launchers[launcher.name];
+      if (_.isNil(executor)) {
+        return;
+      }
+      result.push(_.assign(_.pick(executor, 'process'), launcher));
+    });
+  }
+
+  static get count() {
+    return _.keys(launchers).length;
   }
 }
 
