@@ -1,8 +1,8 @@
 'use strict';
 
-const sink = require('./resolverSink');
+const resolvers = require('./resolverSink');
 const resolve = require('./resolve');
 
 module.exports = {
-  sink, resolve
+  resolvers, resolve
 };

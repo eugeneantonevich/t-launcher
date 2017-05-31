@@ -7,12 +7,11 @@ class TestLauncher2 {
     return 'test2';
   }
 
-  static get inputFields() {
-    return { name: 'fieldToLaunch' };
+  static get requiredFields() {
+    return [{ name: 'fieldToLaunch' }];
   }
 
   static process(input) {
-    console.log(input);
     return { fieldFromLauncher: input.fieldToLaunch };
   }
 }

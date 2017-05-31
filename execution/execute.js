@@ -2,20 +2,18 @@
 const _ = require('lodash');
 const postprocess = require('./postprocess');
 const preprocess = require('./preprocess');
-const valueSink = require('./valueSink');
+const valueSink = require('../common/valueSink');
 
 function _processOne(launcher, values) {
   let preprocessed = preprocess.preprocessValues(launcher, values);
-  console.log([preprocessed]);
+
   let requiredValues = preprocess.getRequieredValues(launcher, preprocessed);
 
   if (!preprocess.validate(requiredValues, launcher)) {
     return Promise.resolve(null);
   }
-  console.log(requiredValues);
   return Promise.resolve(launcher.process(requiredValues, launcher.parameters))
     .then(result => {
-      console.log(result);
       return postprocess(launcher, result);
     }, () => {
       return null;

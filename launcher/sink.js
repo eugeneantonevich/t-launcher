@@ -2,15 +2,17 @@
 
 const _ = require('lodash');
 
-let launchers = {};
-
 class LauncherSink {
 
-  static get(name) {
-    return launchers[name];
+  constructor() {
+    this.launchers = {};
   }
 
-  static register(launcher) {
+  get(name) {
+    return this.launchers[name];
+  }
+
+  register(launcher) {
     if (_.isNil(launcher)) {
       throw new Error('Launcher is empty');
     }
@@ -22,22 +24,26 @@ class LauncherSink {
     if (_.isNil(launcher.process)) {
       throw new Error('Launcher should contain function process');
     }
-    launchers[launcher.type] = launcher;
+    this.launchers[launcher.type] = launcher;
   }
 
-  static resolve(data) {
+  resolve(data) {
     return _.transform(data, (result, launcher) => {
-      const executor = launchers[launcher.name];
+      const executor = this.launchers[launcher.name];
       if (_.isNil(executor)) {
         return;
       }
-      result.push(_.assign(_.pick(executor, 'process'), launcher));
+      result.push(_.assign(_.pick(executor, ['process', 'requiredFields', 'outputFields']), launcher));
     });
   }
 
-  static get count() {
-    return _.keys(launchers).length;
+  get count() {
+    return _.keys(this.launchers).length;
   }
 }
 
-module.exports = LauncherSink;
+function factory() {
+  return new LauncherSink;
+}
+
+module.exports = factory;

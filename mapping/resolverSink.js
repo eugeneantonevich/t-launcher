@@ -1,21 +1,35 @@
 'use strict';
 const _ = require('lodash');
 
-let sink = [];
-
 class ResolverSink {
 
-  static register(resolver) {
+  constructor() {
+    this.sink = {};
+  }
+
+  register(resolver) {
+    if (_.isNil(resolver.type)) {
+      throw new Error('Launch resolver should contain function type');
+    }
+
     if (_.isNil(resolver.resolve)) {
       throw new Error('Launch resolver should contain function resolve');
     }
 
-    sink.push(resolver);
+    this.sink[resolver.type] = resolver;
   }
 
-  static get all() {
-    return sink;
+  get all() {
+    return _.values(this.sink);
+  }
+
+  get(name) {
+    return this.sink[name];
   }
 }
 
-module.exports = ResolverSink;
+function factory() {
+  return new ResolverSink();
+}
+
+module.exports = factory;

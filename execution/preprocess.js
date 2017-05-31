@@ -31,16 +31,17 @@ function _prepareData(values, template) {
 let preprocess = {};
 
 preprocess.getRequieredValues = function(launcher, values) {
-  return _prepareData(values, launcher.inputFields);
+  return _prepareData(values, launcher.requiredFields);
 };
 
 preprocess.preprocessValues = function(launcher, values) {
-  const matched = utils.convert(launcher.inFieldsMatch, _.clone(values));
-  return utils.propagateValues(launcher.inFieldsDefault, _.isNil(matched) ? values : merge(values, matched));
+  let matched = utils.convert(launcher.inFieldsMatch, _.clone(values));
+  matched = _.isNil(matched) ? values : merge(values, matched);
+  return utils.propagateValues(launcher.inFieldsDefault, matched);
 };
 
 preprocess.validate = function(values, launcher) {
-  const template = launcher.inputFields;
+  const template = launcher.requiredFields;
   if (_.isArray(values)) {
     return _.every(values, v => {
       return preprocess.validate(v, template);
