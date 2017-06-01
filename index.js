@@ -1,24 +1,19 @@
 'use strict';
 // const _ = require('lodash');
-const launcher = require('./launcher');
-const mapping = require('./mapping');
-const execution = require('./execution');
+// const launcher = require('./launcher');
+const containers = require('./containers');
+const executor = require('./executor');
 
 function instance() {
   let root = {};
-  const resolverSink = mapping.resolvers();
-  const launcherSink = launcher.sink();
+  const resolvers = containers.resolvers();
+  const launchers = containers.launchers();
 
-  root.mapping = {};
-  root.mapping.resolvers = resolverSink;
+  root.containers = {};
+  root.containers.resolvers = resolvers;
+  root.containers.launchers = launchers;
 
-  root.launchers = {};
-  root.launchers = launcherSink;
-
-  root.execute = function (launchers, values, parameters) {
-    return execution.launch(launchers, values, parameters, launcherSink, resolverSink);
-  };
-
+  root.execute = executor(root.containers);
   return root;
 }
 

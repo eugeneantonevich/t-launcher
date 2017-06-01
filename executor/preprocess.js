@@ -1,7 +1,6 @@
 'use strict';
 const _ = require('lodash');
-const utils = require('../common/utils');
-const merge = require('deepmerge');
+const actions = require('./actions');
 
 function _validate(values, template) {
   const keys = _.keys(values);
@@ -28,19 +27,12 @@ function _prepareData(values, template) {
   }, {});
 }
 
-let preprocess = {};
 
-preprocess.getRequieredValues = function(launcher, values) {
+function _requieredValues (launcher, values) {
   return _prepareData(values, launcher.requiredFields);
-};
+}
 
-preprocess.preprocessValues = function(launcher, values) {
-  let matched = utils.convert(launcher.inFieldsMatch, _.clone(values));
-  matched = _.isNil(matched) ? values : merge(values, matched);
-  return utils.propagateValues(launcher.inFieldsDefault, matched);
-};
-
-preprocess.validate = function(values, launcher) {
+function validate(values, launcher) {
   const template = launcher.requiredFields;
   if (_.isArray(values)) {
     return _.every(values, v => {
@@ -50,6 +42,19 @@ preprocess.validate = function(values, launcher) {
   return _validate(values, template) ?
      _.every(template, t => { return t.fields ? preprocess.validate(values[t.name], t.fields) : true; })
     : false;
-};
+}
+
+function preprocess(launcher, values, parameters) {
+  return new Promise((resolve, reject) => {
+    return actions(launcher.preprocess, values, parameters)
+      .then(preprocessed => {
+        const required = _requieredValues(launcher, preprocessed);
+        if (validate(required, launcher)) {
+          return resolve(required);
+        }
+        return reject();
+      });
+  });
+}
 
 module.exports = preprocess;

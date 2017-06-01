@@ -20,12 +20,12 @@ describe('Default values flow:', function () {
     this.root.mapping.resolvers.register(SimpleResolver2);
     done();
   });
-
+/*
   it('Launch with default values', function () {
     return this.root.execute({ name: 'test3' }, { fieldFromInputData: 'testValue'})
       .then(responce => {
         expect(responce).to.be.like({ defValueToOutput: 'defValue', fieldToOutput: 'testValue' });
       })
   });
-
+*/
 });

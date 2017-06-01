@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 
-class LauncherSink {
+class LauncherContainer {
 
   constructor() {
     this.launchers = {};
@@ -43,7 +43,7 @@ class LauncherSink {
 }
 
 function factory() {
-  return new LauncherSink;
+  return new LauncherContainer;
 }
 
 module.exports = factory;
