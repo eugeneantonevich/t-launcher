@@ -3,7 +3,6 @@ const _ = require('lodash');
 const postprocess = require('./postprocess');
 const preprocess = require('./preprocess');
 const valueSink = require('../common/valueSink');
-const utils = require('../common/utils');
 
 function _processOne(launcher, values, parameters) {
   return preprocess.call(this, launcher, values, parameters)
@@ -38,6 +37,22 @@ function _process(launchers, sink, parameters) {
   });
 }
 
+
+/**
+  [ { procesor1 .. priority: 1.. }, { ..processor2.. priority: 2... } { ..processor3.. priority: 1... } ] =>
+   [[{ procesor1.. priority: 1.. }, { procesor3.. priority: 1.. }], [{ .. priority: 2... }]]
+*/
+function _chunkByPriority(launchers) {
+  return _.transform(launchers, (chunk, launcher) => {
+    const priority = _.isNumber(launcher.priority) ? launcher.priority : 0;
+    if (_.isNil(chunk[priority])) {
+      chunk[priority] = [launcher];
+    } else {
+      chunk[priority].push(launcher);
+    }
+  }, []);
+}
+
 function _validate(data) {
   return _.filter(data, launcher => !_.isNil(launcher.name));
 }
@@ -70,7 +85,7 @@ function execute(launchers, values, parameters) {
     return Promise.resolve(null);
   }
 
-  let resolvedLaunchers = utils.chunkByPriority(this.containers.launchers.resolve(prepared));
+  let resolvedLaunchers = _chunkByPriority(this.containers.launchers.resolve(prepared));
   const sink = valueSink(values);
   return _process.call(this, resolvedLaunchers, sink, parameters)
     .then(result => { return sink.insert(result).getValues(); })
