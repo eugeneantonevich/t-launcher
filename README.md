@@ -2,11 +2,28 @@
 
 ## Description:
 
-t-launcher allow launch predefine functions (launcher) in determine order, transfer result data to next function and then responce with consolidate result. The idea is the similar with pipe-line. There are three state of calling predefine function: preprocess (optional), process(mandatory), postprocess(optional).
-Preprocess and postprocess state allow transform input data with action. eg mapping values or set default.
+t-launcher allows to call some predefined functions (launcher) in a determinate order, pass outcome data to other functions and then deliver consolidated execution result. The approach is similar to pipe-line. There are three processing stages to call a predefined function: preprocess (optional), process (mandatory), postprocess (optional). At preprocess and postprocess stages it is possible to transform input and output data by using actions, such as mapping values or setting default ones.
 
-### Example
+## Example
+
+### Server code
 
 ```
-example
+
+class ExampleLauncher() {
+  process(input) {
+    ...
+  }
+}
+
+const launcher = require('t-launcher');
+
+let instance = launcher();
+let instance.containers.launchers.register(ExampleLaucnher);
+
+```
+
+### Client code
+
+```
 ```
