@@ -30,8 +30,29 @@ function propagateValues(defValues, values) {
   return values;
 }
 
-function defaults(action, values) {
-  return utils.toPromise(propagateValues(action, values));
+function _defaults(action, values, parameters) {
+  if (_.isNil(action)) {
+    return values;
+  }
+
+  if (action.rules) {
+    return propagateValues(action.rules, values);
+  }
+
+  if (_.isNil(action.resolver) || _.isNil(this.containers) || _.isNil(this.containers.resolvers)) {
+    return values;
+  }
+
+  const resolver = this.containers.resolvers.get(action.resolver);
+  return _.isNil(resolver) ? values :
+    utils.toPromise(resolver.resolve(resolver, _.assign(parameters, { action: 'defaults' })))
+      .then(rules => {
+        return propagateValues(rules, values);
+      });
+}
+
+function defaults(action, values, parameters) {
+  return _defaults(action, _.clone(values), parameters);
 }
 
 module.exports = defaults;

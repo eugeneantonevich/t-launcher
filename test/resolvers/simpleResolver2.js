@@ -6,18 +6,18 @@ class SimpleResolver2 {
     return 'simpleResolver2';
   }
 
-  static resolve(launcher) {
-    const inputTemplate = {
-      fieldToLaunch: '$.fieldFromInputData'
-    };
-
-    const outputTemplate = {
-      fieldToOutput: '$.fieldFromLauncher',
-      defValueToOutput: '$.testDefName'
-    };
-    return { inFieldsMatch: inputTemplate, outFieldsMatch: outputTemplate, inFieldsDefault: { testDefName: 'defValue' } };
+  static resolve(launcher, parameters) {
+    switch (parameters.state) {
+      case 'preprocess':
+        return {
+          fieldToLaunch: '$.fieldFromInputData'
+        };
+      case 'defaults':
+        return '$.testDefName';
+      default:
+        return '';
+    }
   }
-
 }
 
 module.exports = SimpleResolver2;

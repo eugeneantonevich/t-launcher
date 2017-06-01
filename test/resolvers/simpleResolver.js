@@ -7,16 +7,22 @@ class SimpleResolver {
   }
 
   static resolve(launcher, parameters) {
-    const inputTemplate = {
-      fieldToLaunch: '$.fieldFromInputData'
-    };
-
-    const outputTemplate = _.isNil(parameters) || _.isNil(parameters.checkParameters) ? {
-      fieldToOutput: '$.fieldFromLauncher'
-    } : {
-      fieldToOutputResolveWithParametes: '$.fieldFromLauncher'
-    };
-    return { inFieldsMatch: inputTemplate, outFieldsMatch: outputTemplate };
+    switch (parameters.state) {
+      case 'preprocess':
+        return {
+          fieldToLaunch: '$.fieldFromInputData'
+        };
+      case 'postprocess':
+        return _.isNil(parameters.checkParameters) ? {
+          fieldToOutput: '$.fieldFromLauncher'
+        } : {
+          fieldToOutputResolveWithParametes: '$.fieldFromLauncher'
+        };
+      case 'defaults':
+        return '$.testDefName';
+      default:
+        return '';
+    }
   }
 }
 

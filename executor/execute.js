@@ -5,29 +5,33 @@ const preprocess = require('./preprocess');
 const valueSink = require('../common/valueSink');
 const utils = require('../common/utils');
 
-function _processOne(launcher, values) {
-  return preprocess.call({ containers: this.containers }, launcher, values)
+function _processOne(launcher, values, parameters) {
+  return preprocess.call(this, launcher, values, parameters)
     .then(preprocessed => {
       return launcher.process(preprocessed);
     })
     .then(result => {
-      return postprocess.call({ containers: this.containers }, launcher, result);
+      return postprocess.call(this, launcher, result, parameters);
     })
     .catch(() => {
       return null;
     });
 }
 
-function _process(launchers, sink) {
+function _consolidate(array) {
+  return _.transform(array, (result, values) => {
+    _.assignIn(result, values);
+  }, {});
+}
+
+function _process(launchers, sink, parameters) {
   if (!launchers.length) {
     return Promise.resolve(sink.getValues());
   }
   const chunk = _.head(launchers);
-  return Promise.all(_.map(chunk, launcher => _processOne.call({ containers: this.containers }, launcher, sink.copy())))
+  return Promise.all(_.map(chunk, launcher => _processOne.call(this, launcher, sink.copy(), parameters)))
   .then(responce => {
-    return _.transform(responce, (result, values) => {
-      _.assignIn(result, values);
-    }, {});
+    return _consolidate(responce);
   })
   .then(values => {
     return _process(_.drop(launchers), sink.insert(values));
@@ -55,20 +59,20 @@ function _prepare(launchers) {
   * @return {Promise} - result fields values
 */
 
-function execute(launchers, values) {
+function execute(launchers, values, parameters) {
   if (_.isNil(this.containers.launchers)) {
     return Promise.resolve(null);
   }
 
   let prepared = _validate(_prepare(launchers));
+
   if (!prepared.length) {
     return Promise.resolve(null);
   }
 
   let resolvedLaunchers = utils.chunkByPriority(this.containers.launchers.resolve(prepared));
-
   const sink = valueSink(values);
-  return _process.call({ containers: this.containers }, resolvedLaunchers, sink)
+  return _process.call(this, resolvedLaunchers, sink, parameters)
     .then(result => { return sink.insert(result).getValues(); })
     .catch(() => { return sink.getValues(); });
 }

@@ -46,7 +46,7 @@ function validate(values, launcher) {
 
 function preprocess(launcher, values, parameters) {
   return new Promise((resolve, reject) => {
-    return actions(launcher.preprocess, values, parameters)
+    return actions.call(this, launcher.preprocess, values, _.assign(parameters, { state: 'preprocess' }))
       .then(preprocessed => {
         const required = _requieredValues(launcher, preprocessed);
         if (validate(required, launcher)) {

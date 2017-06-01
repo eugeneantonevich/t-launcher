@@ -3,17 +3,22 @@
 const _ = require('lodash');
 const defaults = require('./defaults');
 const mapping = require('./mapping');
+const utils = require('../../common/utils');
 
 let actionSink = {};
 actionSink['mapping'] = mapping;
 actionSink['defaults'] = defaults;
 
 function _processOne(name, actions, values, parameters) {
+  if (_.isNil(name)) {
+    return Promise.resolve(values);
+  }
+
   const action = actionSink[name];
   if (_.isNil(action)) {
-    return Promise.resolve(null);
+    return Promise.resolve(values);
   }
-  return action(actions[name], values, parameters);
+  return utils.toPromise(action.call(this, actions[name], values, parameters));
 }
 
 function _process(names, actions, values, parameters) {
@@ -21,17 +26,17 @@ function _process(names, actions, values, parameters) {
     return Promise.resolve(values);
   }
   const name = _.head(names);
-  return _processOne(name, actions, values, parameters)
+  return _processOne.call(this, name, actions, values, parameters)
     .then(result => {
-      return _process(_.drop(names), actions, _.assignIn(values, result), parameters);
-    })
+      return _process.call(this, _.drop(names), actions, _.assign(values, result), parameters);
+    });
 }
 
 function processActions(actions, values, parameters) {
   if (_.isNil(actions)) {
     return Promise.resolve(values);
   }
-  return _process(_.keys(actions), actions, values, parameters);
+  return _process.call(this, _.keys(actions), actions, values, parameters);
 }
 
 module.exports = processActions;
