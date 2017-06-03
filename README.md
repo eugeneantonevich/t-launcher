@@ -9,6 +9,7 @@ T-Launcher allows to call some predefined functions (launcher) in a determinate 
 ### Server code
 
 ```
+
 class ExampleLauncher() {
   // launcher execution object should contain type property
   static get type() {
@@ -80,6 +81,7 @@ Action allow insert default values before luanch task
 Format:
 
 ```
+
 preprocess: {
   defaults: {
     rules: {
@@ -99,6 +101,7 @@ Action allow rename some value before and after task launch. For transform opera
 Example:
 
 ```
+
 preprocess: {
   mapping: {
     rules: {
@@ -118,10 +121,12 @@ You can set static action data. (use section "rules")
 For example:
 
 ```
+
   mapping: {
     rules: {
       some static rules
-    }    
+    }   
+    
 ```
 
 ### Dynamic
@@ -129,9 +134,11 @@ For example:
 To reolve rules in runtime you can set resolver name. (use section "resolver")
 
 ```
+
   mapping: {
     resolver: "resolver_name"
   }
+  
 ```
 
 Before launch task mapping rules will be resolved with registered resolver.
@@ -141,6 +148,7 @@ Example:
 ### Server code
 
 ```
+
 class ExampleResolver() {
   // resolver object should contain type property
   static get type() {
@@ -187,6 +195,7 @@ instance.execute(launchConfiguration, processingValues)
     processing result
     ...
   }
+  
 ```
 
 ## Static instance of library
@@ -197,10 +206,12 @@ Library contain static instance of t-launcher also. Use this static instance thr
 ### Example:
 
 ```
+
 const launcher = require('t-launcher');
 
 let staticInstance = launcher.static;
 ...
+
 ```
 
 ### Take in mind
@@ -225,6 +236,7 @@ Example
 
 
 ```
+
 class ExampleLauncher() {
   static get type() {
     return 'example_launcher';
@@ -242,5 +254,6 @@ class ExampleLauncher() {
       ];
   }
 }
+
 ```
 
