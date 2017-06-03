@@ -1,6 +1,5 @@
 let chai = require('chai');
 let like = require('chai-like');
-let dirtyChai = require('dirty-chai');
 const _ = require('lodash');
 
 let expect = chai.expect;
@@ -9,7 +8,6 @@ const launcher = require('../');
 const TestLauncher3  = require('./launchers/testLauncher3');
 const SimpleResolver2  = require('./resolvers/simpleResolver2');
 
-chai.use(dirtyChai);
 chai.use(like);
 
 describe('Default values flow:', function () {

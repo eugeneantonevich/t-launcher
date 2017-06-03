@@ -1,6 +1,5 @@
 let chai = require('chai');
 let like = require('chai-like');
-let dirtyChai = require('dirty-chai');
 const _ = require('lodash');
 
 let expect = chai.expect;
@@ -10,7 +9,6 @@ const SimpleResolver  = require('./resolvers/simpleResolver');
 const TestLauncher  = require('./launchers/testLauncher');
 const TestLauncher2  = require('./launchers/testLauncher2');
 
-chai.use(dirtyChai);
 chai.use(like);
 
 describe('Resolve launcher mapping flow:', function () {
