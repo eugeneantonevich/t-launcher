@@ -215,7 +215,7 @@ For sequentially task execution you can use priority. First will be called tasks
 
 Launcher should have next property
 1. requiredFields (array, optional) - fields, that launcher use. If some field are not present in input values, processing will be skipped. 
-  !!! Call context consist of requiredFields only.
+  Important: call context consist of requiredFields only.
 2. type (string, mandatory) - name of launcher
 3. outputFields (array, optional) - enumeration of launch result fields.(not use yet)
 
