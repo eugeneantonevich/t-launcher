@@ -9,6 +9,8 @@ let actionSink = {};
 actionSink['mapping'] = mapping;
 actionSink['defaults'] = defaults;
 
+// TODO: resolve rules should be in another component
+
 function _processOne(name, actions, values, parameters) {
   if (_.isNil(name)) {
     return Promise.resolve(values);
