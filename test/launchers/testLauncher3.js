@@ -12,7 +12,7 @@ class TestLauncher3 {
   }
 
   static process(input) {
-    return _.assign({ fieldFromLauncher: input.fieldToLaunch }, input);
+    return _.assign({ fieldFromLauncher: input.fieldToLaunch, specializeValue: 'value' }, input);
   }
 }
 

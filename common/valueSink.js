@@ -7,13 +7,17 @@ class Sink {
     this._values = _.isNil(values) ? {} : values;
   }
 
-  insert(values) {
-    _.assignIn(this._values, values);
+  insert(data) {
+    if (data instanceof Sink) {
+      _.assignIn(this._values, data.getValues());
+    } else {
+      _.assignIn(this._values, data);
+    }
     return this;
   }
 
   copy() {
-    return _.clone(this._values);
+    return valuesSink(_.clone(this._values));
   }
 
   getValues() {
@@ -24,5 +28,11 @@ class Sink {
 function valuesSink(values) {
   return new Sink(values);
 }
+
+valuesSink.consolidate = function(sinks) {
+  return _.transform(sinks, (result, sink) => {
+    result.insert(sink);
+  }, valuesSink(null));
+};
 
 module.exports = valuesSink;

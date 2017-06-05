@@ -1,6 +1,6 @@
 'use strict';
 const _ = require('lodash');
-const actions = require('./actions');
+const actions = require('../../actions');
 
 function _validate(values, template) {
   const keys = _.keys(values);

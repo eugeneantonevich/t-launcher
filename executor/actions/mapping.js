@@ -41,6 +41,13 @@ function _mapping(action, values, parameters) {
     });
 }
 
+/**
+  * @param {Object} action - action information
+  * @param {Object} values - input processing values
+  * @param {Object} parameters - additional parameters
+  * @return {Promise} - result values = source values assign with converted values
+*/
+
 function mapping(action, values, parameters) {
   return _mapping.call(this, action, values, parameters);
 }

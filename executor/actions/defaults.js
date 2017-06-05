@@ -7,7 +7,7 @@ const utils = require('../../common/utils');
  * Fill and return fields values with input default values
  * @param {Object} defValues - object of rules default values
  * @param {Object} values - input fields values
- * @return {Object} - processed fields values
+ * @return {Object} - processed values = source values assign with defaults
  */
 
 function propagateValues(defValues, values) {
