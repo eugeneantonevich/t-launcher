@@ -5,7 +5,7 @@ const utils = require('../../common/utils');
 
 /**
  * Fill and return fields values with input default values
- * @param {Object} defaultvalues - object of rules default values
+ * @param {Object} defValues - object of rules default values
  * @param {Object} values - input fields values
  * @return {Object} - processed fields values
  */
@@ -32,7 +32,7 @@ function propagateValues(defValues, values) {
 
 function _defaults(action, values, parameters) {
   if (_.isNil(action)) {
-    return values;
+    return Promise.reject(new Error('action not present'));
   }
 
   if (action.rules) {
@@ -40,7 +40,7 @@ function _defaults(action, values, parameters) {
   }
 
   if (_.isNil(action.resolver) || _.isNil(this.containers) || _.isNil(this.containers.resolvers)) {
-    return values;
+    return Promise.reject(new Error('resolver name is absent'));
   }
 
   const resolver = this.containers.resolvers.get(action.resolver);

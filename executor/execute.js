@@ -12,8 +12,9 @@ function _processOne(launcher, values, parameters) {
     .then(result => {
       return postprocess.call(this, launcher, result, parameters);
     })
-    .catch(() => {
-      return null;
+    .catch((/* err */) => {
+      // TODO: somehow use err
+      return {};
     });
 }
 
@@ -76,13 +77,13 @@ function _prepare(launchers) {
 
 function execute(launchers, values, parameters) {
   if (_.isNil(this.containers.launchers)) {
-    return Promise.resolve(null);
+    return Promise.resolve(values);
   }
 
   let prepared = _validate(_prepare(launchers));
 
   if (!prepared.length) {
-    return Promise.resolve(null);
+    return Promise.resolve(values);
   }
 
   let resolvedLaunchers = _chunkByPriority(this.containers.launchers.resolve(prepared));

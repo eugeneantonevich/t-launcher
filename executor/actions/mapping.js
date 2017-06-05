@@ -2,7 +2,6 @@
 const _ = require('lodash');
 const transform = require('jsonpath-object-transform');
 const utils = require('../../common/utils');
-const merge = require('deepmerge');
 
 /**
   на выходе только те параметры, которые описаны в rules.
@@ -10,17 +9,17 @@ const merge = require('deepmerge');
 function convert(rules, values) {
   try {
     if (!rules || !values) {
-      return null;
+      return Promise.reject(new Error('rules or values is absent'));
     }
-    return transform(values, rules);
+    return Promise.resolve(_.assign(values, transform(values, rules)));
   } catch (e) {
-    return null;
+    return Promise.reject(e);
   }
 }
 
 function _mapping(action, values, parameters) {
   if (_.isNil(action)) {
-    return values;
+    return Promise.reject(new Error('action is absent'));
   }
 
   if (action.rules) {
@@ -28,19 +27,17 @@ function _mapping(action, values, parameters) {
   }
 
   if (_.isNil(action.resolver) || _.isNil(this.containers) || _.isNil(this.containers.resolvers)) {
-    return values;
+    return Promise.reject(new Error('resolver name is absent or there are no registered resolvers'));
   }
 
   const resolver = this.containers.resolvers.get(action.resolver);
-
   if (_.isNil(resolver)) {
-    return values;
+    return Promise.reject('resolver '.concat(action.resolver).concat(' is absent'));
   }
 
   return utils.toPromise(resolver.resolve(resolver, _.assign(parameters, { action: 'mapping' })))
     .then(rules => {
-      const converted = convert(rules, values);
-      return _.isNil(converted) ? values : merge(values, converted);
+      return convert(rules, values);
     });
 }
 

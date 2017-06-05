@@ -49,13 +49,16 @@ function validate(values, launcher) {
 
 function preprocess(launcher, values, parameters) {
   return new Promise((resolve, reject) => {
+    if (_.isNil(launcher)) {
+      return reject(new Error('launcher is empty'));
+    }
     return actions.call(this, launcher.preprocess, values, _.assign(parameters, { state: 'preprocess' }))
       .then(preprocessed => {
         const required = _requieredValues(launcher, preprocessed);
         if (validate(required, launcher)) {
           return resolve(required);
         }
-        return reject();
+        return reject(new Error('Some required values are absent!'));
       });
   });
 }

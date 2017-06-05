@@ -13,17 +13,17 @@ actionSink['defaults'] = defaults;
 
 function _processOne(action, values, parameters) {
   if (_.isNil(action)) {
-    return Promise.resolve(values);
+    return Promise.reject(new Error('logic error: action is absent'));
   }
 
   const name = action.action;
   if (_.isNil(name)) {
-    return Promise.resolve(values);
+    return Promise.reject(new Error('name is absent'));
   }
 
   const impl = actionSink[name];
   if (_.isNil(impl)) {
-    return Promise.resolve(values);
+    return Promise.reject(new Error('invalid action'));
   }
   return utils.toPromise(impl.call(this, action, values, parameters));
 }
@@ -35,7 +35,9 @@ function _process(actions, values, parameters) {
   const action = _.head(actions);
   return _processOne.call(this, action, values, parameters)
     .then(result => {
-      return _process.call(this, _.drop(actions), _.assign(values, result), parameters);
+      return _process.call(this, _.drop(actions), result, parameters);
+    }, (/* err */) => {
+      return _process.call(this, _.drop(actions), values, parameters);
     });
 }
 
