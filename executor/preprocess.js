@@ -32,16 +32,19 @@ function _requieredValues (launcher, values) {
   return _prepareData(values, launcher.requiredFields);
 }
 
-function validate(values, launcher) {
-  const template = launcher.requiredFields;
+function _checkValue(values, template) {
   if (_.isArray(values)) {
     return _.every(values, v => {
-      return preprocess.validate(v, template);
+      return _checkValue(v, template);
     });
   }
   return _validate(values, template) ?
-     _.every(template, t => { return t.fields ? preprocess.validate(values[t.name], t.fields) : true; })
+     _.every(template, t => { return t.fields ? _checkValue(values[t.name], t.fields) : true; })
     : false;
+}
+
+function validate(values, launcher) {
+  return _checkValue(values, launcher.requiredFields);
 }
 
 function preprocess(launcher, values, parameters) {

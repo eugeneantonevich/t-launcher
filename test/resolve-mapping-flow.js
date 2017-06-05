@@ -40,18 +40,20 @@ describe('Resolve launcher mapping flow:', function () {
     return this.root.execute(
       {
         name: 'test2',
-        preprocess: {
-          mapping: {
+        preprocess: [
+          {
+            action: 'mapping',
             rules: {
-              fieldToLaunch: '$.fieldFromInputData'
-            }
+                fieldToLaunch: '$.fieldFromInputData'
+              }
           }
-        },
-        postprocess: {
-          mapping: {
+        ],
+        postprocess: [
+          {
+            action: 'mapping',
             resolver: 'simpleResolver'
           }
-        }
+        ]
       },
       {
         fieldFromInputData: 'testValue'
@@ -65,18 +67,20 @@ describe('Resolve launcher mapping flow:', function () {
     return this.root.execute(
       {
         name: 'test2',
-        preprocess: {
-          mapping: {
+        preprocess: [
+          {
+            action: 'mapping',
             rules: {
               fieldToLaunch: '$.fieldFromInputData'
             }
           }
-        },
-        postprocess: {
-          mapping: {
+        ],
+        postprocess: [
+          {
+            action: 'mapping',
             resolver: 'simpleResolver'
           }
-        }
+        ]
       },
       {
         fieldFromInputData: 'testValue'
@@ -90,16 +94,18 @@ describe('Resolve launcher mapping flow:', function () {
     return this.root.execute(
       {
         name: 'test2',
-        preprocess: {
-          mapping: {
+        preprocess: [
+          {
+            action: 'mapping',
             resolver: 'simpleResolver'
           }
-        },
-        postprocess: {
-          mapping: {
+        ],
+        postprocess: [
+          {
+            action: 'mapping',
             resolver: 'simpleResolver'
           }
-        }
+        ]
       },
       {
         fieldFromInputData: 'testValue'

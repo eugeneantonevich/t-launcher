@@ -11,34 +11,39 @@ actionSink['defaults'] = defaults;
 
 // TODO: resolve rules should be in another component
 
-function _processOne(name, actions, values, parameters) {
+function _processOne(action, values, parameters) {
+  if (_.isNil(action)) {
+    return Promise.resolve(values);
+  }
+
+  const name = action.action;
   if (_.isNil(name)) {
     return Promise.resolve(values);
   }
 
-  const action = actionSink[name];
-  if (_.isNil(action)) {
+  const impl = actionSink[name];
+  if (_.isNil(impl)) {
     return Promise.resolve(values);
   }
-  return utils.toPromise(action.call(this, actions[name], values, parameters));
+  return utils.toPromise(impl.call(this, action, values, parameters));
 }
 
-function _process(names, actions, values, parameters) {
-  if (!names.length) {
+function _process(actions, values, parameters) {
+  if (!actions.length) {
     return Promise.resolve(values);
   }
-  const name = _.head(names);
-  return _processOne.call(this, name, actions, values, parameters)
+  const action = _.head(actions);
+  return _processOne.call(this, action, values, parameters)
     .then(result => {
-      return _process.call(this, _.drop(names), actions, _.assign(values, result), parameters);
+      return _process.call(this, _.drop(actions), _.assign(values, result), parameters);
     });
 }
 
 function processActions(actions, values, parameters) {
-  if (_.isNil(actions)) {
+  if (!_.isArray(actions) || !actions.length) {
     return Promise.resolve(values);
   }
-  return _process.call(this, _.keys(actions), actions, values, parameters);
+  return _process.call(this, actions, values, parameters);
 }
 
 module.exports = processActions;

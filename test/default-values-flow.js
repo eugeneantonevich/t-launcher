@@ -23,24 +23,27 @@ describe('Default values flow:', function () {
     return this.root.execute(
       {
         name: 'test3',
-        preprocess: {
-          defaults: {
+        preprocess: [
+          {
+            action: 'defaults',
             rules: {
               testDefName: 'defValue'
             }
           },
-          mapping: {
+          {
+            action: 'mapping',
             resolver: 'simpleResolver2'
           }
-        },
-        postprocess: {
-          mapping: {
+        ],
+        postprocess: [
+          {
+            action: 'mapping',
             rules: {
               fieldToOutput: '$.fieldFromLauncher',
               defValueToOutput: '$.testDefName'
             }
           }
-        }
+        ]
       },
       {
         fieldFromInputData: 'testValue'
