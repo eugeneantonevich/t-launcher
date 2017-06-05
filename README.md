@@ -76,7 +76,7 @@ instance.execute(launchConfiguration, processingValues)
 
 Description:
 
-Action allow insert default values before luanch task
+Action allows to insert default values before launching a task.
 
 Format:
 
@@ -96,7 +96,7 @@ preprocess: {
 
 Description:
 
-Action allow rename some value before and after task launch. For transform operation use library jsonpath-object-transform. Transform format is described here https://www.npmjs.com/package/jsonpath-object-transform;
+Action allows to rename some values before and after start of a task. For the transform operation used library jsonpath-object- transform. Transform format is described here https://www.npmjs.com/package/jsonpath-object-transform.
 
 Example:
 
@@ -116,7 +116,7 @@ preprocess: {
 
 ### Static
 
-You can set static action data. (use section "rules")
+Action rules can be statically-set (use section "rules").
 
 For example:
 
@@ -131,7 +131,7 @@ For example:
 
 ### Dynamic
 
-To reolve rules in runtime you can set resolver name. (use section "resolver")
+To resolve rules in runtime you can set a resolver name (use section "resolver").
 
 ```
 
@@ -141,7 +141,7 @@ To reolve rules in runtime you can set resolver name. (use section "resolver")
   
 ```
 
-Before launch task mapping rules will be resolved with registered resolver.
+Before start of a task, mapping rules will be resolved with a registered resolver.
 
 Example:
 
@@ -198,10 +198,9 @@ instance.execute(launchConfiguration, processingValues)
   
 ```
 
-## Static instance of library
+## Library static instance
 
-You can instance the new object and use it. Register and execute some process on created instace. 
-Library contain static instance of t-launcher also. Use this static instance througth property static
+You can create and use new objects, as well as register and execute processes with the created instances. The library contains static instance of t-launcher. Use static instance via the property “static”.
 
 ### Example:
 
@@ -214,21 +213,22 @@ let staticInstance = launcher.static;
 
 ```
 
-### Take in mind
- Static istance is shared not for whole node programm. Only per package.
+### Keep in mind
+ Static instance is set not for the whole node program. It is shared only for a package.
 
-
-## Task priority
+## Tasks priority
 For sequentially task execution you can use priority. First will be called tasks with priority 0, then 1 and so on. Default value of property is 0.
 
 
 ## Launcher description
 
-Launcher should have next property
-1. requiredFields (array, optional) - fields, that launcher use. If some field are not present in input values, processing will be skipped. 
-  Important: call context consist of requiredFields only.
-2. type (string, mandatory) - name of launcher
-3. outputFields (array, optional) - enumeration of launch result fields.(not use yet)
+Priorities may be used for sequential tasks execution. Tasks with priority “0” will be called first, after which tasks with priority “1” will follow, and so on. Default property value is “0”.
+
+A launcher should have the following properties:
+1. requiredFields (array, optional) – fields which are used in a launcher. If there are any missing fields in the input values, respective tasks will be skipped from processing.
+    Important: call context consists of requiredFields only;
+2. type (string, mandatory) - name of a launcher;
+3. outputFields (array, optional) - enumeration of resulted fields within a launch (not in use yet).
 
 Launcher should contain process function. Function return object or Promise object.
 
