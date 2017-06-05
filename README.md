@@ -39,20 +39,22 @@ let instance.containers.launchers.register(ExampleLaucnher);
 const launchConfiguration = [
   {
     name: example_launcher,
-    preprocess: {
-      defaults: {
+    preprocess: [
+      {
+        action: "defaults",
         rules: {
           defValueName: defaultData
         }
       }
-    },
-    postprocess: {
-      mapping: {
+    ],
+    postprocess: [
+      {
+        action: "defaults",
         rules: {
           targetFieldNameToOutput: "$.sourceFieldNameFromLaunchResult"
         }
       }
-    },
+    ],
     priority: 1
   }
 ];
@@ -82,13 +84,14 @@ Format:
 
 ```
 
-preprocess: {
-  defaults: {
+preprocess: [
+  {
+    action: "defaults",
     rules: {
       fieldName: fieldValue
-    }    
+    }
   }
-}
+]
 
 ```
 
@@ -102,13 +105,14 @@ Example:
 
 ```
 
-preprocess: {
-  mapping: {
+preprocess: [
+  {
+    action: "mapping",
     rules: {
       targetFieldNameForLaunch: "$.sourceFieldNameFromInputValues"
-    }    
+    }
   }
-}
+]
 
 ```
 
@@ -121,11 +125,10 @@ Action rules can be statically-set (use section "rules").
 For example:
 
 ```
-
-  mapping: {
-    rules: {
-      some static rules
-    }   
+  action: "mapping",
+  rules: {
+    some static rules
+  }   
     
 ```
 
@@ -134,10 +137,8 @@ For example:
 To resolve rules in runtime you can set a resolver name (use section "resolver").
 
 ```
-
-  mapping: {
-    resolver: "resolver_name"
-  }
+  action: "mapping",
+  resolver: "resolver_name"
   
 ```
 
@@ -177,12 +178,12 @@ instance.containers.resolvers.register(ExampleResolver);
 const launchConfiguration = [
   {
     name: example_launcher,
-    preprocess: {
-      mapping: {
-        resolver: "example_resolver"
-      }
+    preprocess: [
+    {
+      action: "mapping",
+      resolver: "example_resolver"
     }
-  }
+  ]
 ];
 
 let processingValues = {
