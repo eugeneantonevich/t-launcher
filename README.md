@@ -55,7 +55,7 @@ const launchConfiguration = [
         }
       }
     ],
-    priority: 1
+    thread: 1
   }
 ];
 
@@ -217,13 +217,10 @@ let staticInstance = launcher.static;
 ### Keep in mind
  Static instance is set not for the whole node program. It is shared only for a package.
 
-## Tasks priority
-For sequentially task execution you can use priority. First will be called tasks with priority 0, then 1 and so on. Default value of property is 0.
-
+## Tasks threads
+You can separate tasks execution in threads. Set property thread to join tasks. Default value of property is 0. If tasks finish with some error, next tasks in thread will not be launched.
 
 ## Launcher description
-
-Priorities may be used for sequential tasks execution. Tasks with priority “0” will be called first, after which tasks with priority “1” will follow, and so on. Default property value is “0”.
 
 A launcher should have the following properties:
 1. requiredFields (array, optional) – fields which are used in a launcher. If there are any missing fields in the input values, respective tasks will be skipped from processing.
