@@ -218,7 +218,33 @@ let staticInstance = launcher.static;
  Static instance is set not for the whole node program. It is shared only for a package.
 
 ## Task threads
-You can separate tasks execution in threads. Set property thread to join tasks. Default value of property is 0. If tasks finish with some error, next tasks in thread will not be launched.
+You can separate tasks execution in threads. Join tasks to array and they will be executed in separate thread. If tasks finish with some error, next tasks in thread will not be launched.
+
+Example: 
+[
+  [
+    ---- first thread
+    [
+      {
+        name: 'test3'
+      },
+      {
+        name: 'test1'
+      }
+    ],
+    ---- second thread
+    {
+      name: 'test2'
+    }
+    ----- third thread
+    [
+      {
+        name: 'test4'
+      }
+    ]
+    -------
+  ]
+]
 
 ## Launcher description
 
