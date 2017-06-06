@@ -7,6 +7,17 @@ class TestLauncher {
     return 'test';
   }
 
+  static get responceFields() {
+    return [
+      {
+        name: 'responce'
+      },
+      {
+        name: 'additional'
+      }
+    ];
+  }
+
   static process(input) {
     return _.assign({ responce: 'value' }, input);
   }

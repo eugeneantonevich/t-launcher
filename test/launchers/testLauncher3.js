@@ -11,6 +11,20 @@ class TestLauncher3 {
     return [{ name: 'fieldToLaunch' }, { name: 'testDefName' }];
   }
 
+  static get responceFields() {
+    return [
+      {
+        name: 'specializeValue'
+      },
+      {
+        name: 'defValueToOutput'
+      },
+      {
+        name: 'fieldToOutput'
+      }
+    ];
+  }
+
   static process(input) {
     return _.assign({ fieldFromLauncher: input.fieldToLaunch, specializeValue: 'value' }, input);
   }

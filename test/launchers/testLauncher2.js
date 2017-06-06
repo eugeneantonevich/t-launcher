@@ -7,6 +7,20 @@ class TestLauncher2 {
     return 'test2';
   }
 
+  static get responceFields() {
+    return [
+      {
+        name: 'fieldToOutput'
+      },
+      {
+        name: 'fieldToOutputResolveWithParametes'
+      },
+      {
+        name: 'fieldFromLauncher'
+      }
+    ];
+  }
+
   static get requiredFields() {
     return [{ name: 'fieldToLaunch' }];
   }

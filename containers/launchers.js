@@ -33,7 +33,7 @@ class LauncherContainer {
       if (_.isNil(executor)) {
         return;
       }
-      result.push(_.assign(_.pick(executor, ['process', 'requiredFields', 'outputFields']), launcher));
+      result.push(_.assign(_.pick(executor, ['process', 'requiredFields', 'responceFields']), launcher));
     });
   }
 
