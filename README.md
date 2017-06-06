@@ -220,7 +220,10 @@ let staticInstance = launcher.static;
 ## Task threads
 You can separate tasks execution in threads. Join tasks to array and they will be executed in separate thread. If tasks finish with some error, next tasks in thread will not be launched.
 
-Example: 
+### Example:
+
+```
+
 [
   [
     ---- first thread
@@ -245,6 +248,8 @@ Example:
     -------
   ]
 ]
+
+```
 
 ## Launcher description
 
