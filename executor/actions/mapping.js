@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const transform = require('jsonpath-object-transform');
 const utils = require('../../common/utils');
+const merge = require('deepmerge');
 
 /**
   на выходе только те параметры, которые описаны в rules.
@@ -11,7 +12,7 @@ function convert(rules, values) {
     if (!rules || !values) {
       return Promise.reject(new Error('rules or values is absent'));
     }
-    return Promise.resolve(_.assign(values, transform(values, rules)));
+    return Promise.resolve(merge(values, transform(values, rules)));
   } catch (e) {
     return Promise.reject(e);
   }

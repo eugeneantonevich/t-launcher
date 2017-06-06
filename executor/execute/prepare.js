@@ -9,12 +9,8 @@ function _prepare(launchers) {
   return [launchers];
 }
 
-function filter(launchers) {
-  return _.filter(launchers, launcher => !_.isNil(launcher.name));
-}
-
 function prepare(launchers) {
-  return _.compact(filter(_prepare(launchers)));
+  return _.compact(_prepare(launchers));
 }
 
 module.exports = prepare;

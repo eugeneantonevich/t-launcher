@@ -10,7 +10,7 @@ function _processThread(launchers, sink, parameters) {
     return Promise.resolve(sink);
   }
   const launcher = _.head(launchers);
-  return processing.call(this, this.containers.launchers.resolve(launcher), sink, parameters)
+  return processing.call(this, this.containers.launchers.resolve(launcher), sink.copy(), parameters)
     .then(resultSink => {
       return _processThread.call(this, _.drop(launchers), sink.insert(resultSink), parameters);
     }, (/* err */) => {
@@ -68,6 +68,7 @@ function execute(launchers, values, parameters) {
     return Promise.resolve(values);
   }
   let sink = valueSink(values);
+
   return _process.call(this, _toTheadChunk(prepared), sink.copy(), parameters)
     .then(result => {
       return sink.insert(result).getValues();
