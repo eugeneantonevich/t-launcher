@@ -226,8 +226,9 @@ A launcher should have the following properties:
 1. requiredFields (array, optional) – fields which are used in a launcher. If there are any missing fields in the input values, respective tasks will be skipped from processing.
     Important: call context consists of requiredFields only;
 2. type (string, mandatory) - name of a launcher;
-3. outputFields (array, optional) - enumeration of resulted fields within a launch (not in use yet).
-
+3. responceFields (array, optional) - enumeration of resulted fields within a launch. 
+    Important: task's result may contain field only from this property
+    
 Launcher should contain process function. Function return object or Promise object.
 
 Example
@@ -250,6 +251,12 @@ class ExampleLauncher() {
           name: 'fieldToLaunch'
         }
       ];
+  },
+  
+  static get responveFields() {
+    return [{
+      name: 'responcefieldname'
+    }]
   }
 }
 
