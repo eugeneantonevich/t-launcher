@@ -14,7 +14,7 @@ function filter(launchers) {
 }
 
 function prepare(launchers) {
-  return filter(_prepare(launchers));
+  return _.compact(filter(_prepare(launchers)));
 }
 
 module.exports = prepare;

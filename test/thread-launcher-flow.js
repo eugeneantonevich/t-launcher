@@ -21,20 +21,17 @@ describe('Launcher threads flow:', function () {
     done();
   });
 
-  it('Launch two thread. One is valid', function () {
+  it('Launch one thread. frist laucher is valid', function () {
     return this.root.execute(
       [
         {
-          name: 'test',
-          thread: 0
+          name: 'test'
         },
         {
-          name: 'test1',
-          thread: 1
+          name: 'test1'
         },
         {
-          name: 'test2',
-          thread: 1
+          name: 'test2'
         }
       ])
       .then(responce => {
@@ -42,20 +39,17 @@ describe('Launcher threads flow:', function () {
       })
   });
 
-  it('Launch two thread. One is valid, second thread fail on second launcher', function () {
+  it('Launch one thread. One and second launchers are valid', function () {
     return this.root.execute(
       [
         {
-          name: 'test',
-          thread: 0
+          name: 'test'
         },
         {
-          name: 'test2',
-          thread: 1
+          name: 'test2'
         },
         {
-          name: 'test3',
-          thread: 1
+          name: 'test3'
         }
       ],
     {
@@ -67,20 +61,17 @@ describe('Launcher threads flow:', function () {
       })
   });
 
-  it('Launch two thread. All is valid', function () {
+  it('One thread. All is valid', function () {
     return this.root.execute(
       [
         {
-          name: 'test',
-          thread: 0
+          name: 'test'
         },
         {
-          name: 'test2',
-          thread: 1
+          name: 'test2'
         },
         {
-          name: 'test3',
-          thread: 1
+          name: 'test3'
         }
       ],
     {
@@ -102,20 +93,44 @@ describe('Launcher threads flow:', function () {
     return this.root.execute(
       [
         {
-          name: 'test2',
-          thread: 0
+          name: 'test2'
         },
         {
-          name: 'test2',
-          thread: 0
+          name: 'test1'
         },
         {
-          name: 'test3',
-          thread: 0
+          name: 'test3'
         }
       ])
       .then(responce => {
         expect(responce).to.not.have.property('responce');
+      })
+  });
+
+  it('One thread. First launcher should fail', function () {
+    return this.root.execute(
+      [
+        [
+          {
+            name: 'test3'
+          },
+          {
+            name: 'test1'
+          }
+        ],
+        {
+          name: 'test2'
+        }
+      ],
+    {
+      fieldToLaunch: 'testingValue'
+    })
+      .then(responce => {
+        expect(responce).to.be.like(
+          {
+            fieldToLaunch: 'testingValue',
+            fieldFromLauncher: 'testingValue'
+          });
       })
   });
 

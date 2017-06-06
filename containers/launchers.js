@@ -27,14 +27,21 @@ class LauncherContainer {
     this.launchers[launcher.type] = launcher;
   }
 
+  _resolve(launcher) {
+    const executor = this.launchers[launcher.name];
+    if (_.isNil(executor)) {
+      return null;
+    }
+    return _.assign(_.pick(executor, ['process', 'requiredFields', 'responceFields']), launcher);
+  }
+
   resolve(data) {
-    return _.transform(data, (result, launcher) => {
-      const executor = this.launchers[launcher.name];
-      if (_.isNil(executor)) {
-        return;
-      }
-      result.push(_.assign(_.pick(executor, ['process', 'requiredFields', 'responceFields']), launcher));
-    });
+    if (_.isArray(data)) {
+      return _.compact(_.transform(data, (result, launcher) => {
+        result.push(this._resolve(launcher));
+      }, []));
+    }
+    return this._resolve(data);
   }
 
   get count() {

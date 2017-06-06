@@ -17,10 +17,10 @@ class TestLauncher3 {
         name: 'specializeValue'
       },
       {
-        name: 'defValueToOutput'
+        name: 'testDefName'
       },
       {
-        name: 'fieldToOutput'
+        name: 'fieldFromLauncher'
       }
     ];
   }

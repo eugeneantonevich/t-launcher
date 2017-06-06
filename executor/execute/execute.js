@@ -10,7 +10,7 @@ function _processThread(launchers, sink, parameters) {
     return Promise.resolve(sink);
   }
   const launcher = _.head(launchers);
-  return processing.call(this, launcher, sink, parameters)
+  return processing.call(this, this.containers.launchers.resolve(launcher), sink, parameters)
     .then(resultSink => {
       return _processThread.call(this, _.drop(launchers), sink.insert(resultSink), parameters);
     }, (/* err */) => {
@@ -39,15 +39,15 @@ function _process(threads, sink, parameters) {
 */
 
 function _toTheadChunk(launchers) {
-  return _.transform(launchers, (chunk, launcher) => {
-    const thread = _.isNumber(launcher.thread) ? launcher.thread : 0;
-    if (_.isNil(chunk[thread])) {
-      chunk[thread] = [launcher];
+  return _.compact(_.transform(launchers, (chunk, data) => {
+    if (_.isArray(data)) {
+      chunk.push(data);
     } else {
-      chunk[thread].push(launcher);
+      chunk.push([data]);
     }
-  }, []);
+  }, []));
 }
+
 
 /**
   Public method
@@ -68,8 +68,7 @@ function execute(launchers, values, parameters) {
     return Promise.resolve(values);
   }
   let sink = valueSink(values);
-  let threads = _toTheadChunk(this.containers.launchers.resolve(prepared));
-  return _process.call(this, threads, sink.copy(), parameters)
+  return _process.call(this, _toTheadChunk(prepared), sink.copy(), parameters)
     .then(result => {
       return sink.insert(result).getValues();
     })
