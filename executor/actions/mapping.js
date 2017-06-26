@@ -3,6 +3,17 @@ const _ = require('lodash');
 const transform = require('jsonpath-object-transform');
 const utils = require('../../common/utils');
 const merge = require('deepmerge');
+const recursive = require('object-recursive-iterator');
+const moment = require('moment');
+
+function prepare(values, maergeValues) {
+  recursive.forAll(values, ([path], key, value) => {
+    if (moment.isMoment(value) && moment.isMoment(_.get(maergeValues, path))) {
+      _.set(values, path, null);
+    }
+  });
+  return values;
+}
 
 /**
   на выходе только те параметры, которые описаны в rules.
@@ -12,7 +23,9 @@ function convert(rules, values) {
     if (!rules || !values) {
       return Promise.reject(new Error('rules or values is absent'));
     }
-    return Promise.resolve(merge(values, transform(values, rules)));
+    const source = _.clone(values);
+    const transformed = transform(source, rules);
+    return merge(prepare(source, transformed), transformed);
   } catch (e) {
     return Promise.reject(e);
   }
