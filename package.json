@@ -26,9 +26,7 @@
   "dependencies": {
     "deepmerge": "^1.4.4",
     "jsonpath-object-transform": "^1.0.4",
-    "lodash": "^4.15.0",
-    "moment": "^2.18.1",
-    "object-recursive-iterator": "^1.0.2"
+    "lodash": "^4.15.0"
   },
   "directories": {
     "test": "test"

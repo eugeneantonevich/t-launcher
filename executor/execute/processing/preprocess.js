@@ -29,7 +29,7 @@ function _prepareData(values, template) {
 
 
 function _requieredValues (launcher, values) {
-  return _.isNil(launcher.requiredFields) ? values : _prepareData(values, launcher.requiredFields);
+  return _prepareData(values, launcher.requiredFields);
 }
 
 function _checkValue(values, template) {

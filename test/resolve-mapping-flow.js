@@ -9,14 +9,11 @@ const SimpleResolver  = require('./resolvers/simpleResolver');
 const TestLauncher  = require('./launchers/testLauncher');
 const TestLauncher2  = require('./launchers/testLauncher2');
 
-const moment = require('moment');
-
 chai.use(like);
 
 describe('Resolve launcher mapping flow:', function () {
 
   before(function (done) {
-    this.testMoment = moment();
     this.root = launcher();
     this.root.containers.launchers.register(TestLauncher);
     this.root.containers.launchers.register(TestLauncher2);
@@ -120,28 +117,5 @@ describe('Resolve launcher mapping flow:', function () {
         expect(responce).to.be.like({ fieldToOutputResolveWithParametes: 'testValue' });
       })
   });
-
-  it('Process test launcher. resolve work with parameters', function () {
-    return this.root.execute(
-      {
-        name: 'test',
-        postprocess: [
-          {
-            action: 'mapping',
-            rules: {
-              additional: '$.additional'
-            }
-          }
-        ]
-      },
-      {
-        additional: moment()
-      }
-      )
-      .then(responce => {
-//        expect(responce).to.be.like({ fieldToOutputResolveWithParametes: 'testValue' });
-      })
-  });
-
 
 });
