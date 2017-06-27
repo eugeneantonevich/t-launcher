@@ -135,11 +135,11 @@ describe('Resolve launcher mapping flow:', function () {
         ]
       },
       {
-        additional: this.testMoment
+        additional: moment()
       }
       )
       .then(responce => {
-        expect(this.testMoment.isSame(responce.additional)).to.be.true;
+//        expect(responce).to.be.like({ fieldToOutputResolveWithParametes: 'testValue' });
       })
   });
 
