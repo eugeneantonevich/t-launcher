@@ -54,8 +54,7 @@ const launchConfiguration = [
           targetFieldNameToOutput: "$.sourceFieldNameFromLaunchResult"
         }
       }
-    ],
-    thread: 1
+    ]
   }
 ];
 
